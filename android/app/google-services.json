@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "310345922971",
+    "project_id": "flutter-todolist-588ea",
+    "storage_bucket": "flutter-todolist-588ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310345922971:android:543d6c4e8c302a5ebfc93e",
+        "android_client_info": {
+          "package_name": "com.example.flutter_ilham_todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310345922971-sa50da5gl9iqu6utikkqm5c1j11hi7js.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPf5jLqx8iH_GO2jIFeUpwV2_GmTGHclE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310345922971-sa50da5gl9iqu6utikkqm5c1j11hi7js.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
