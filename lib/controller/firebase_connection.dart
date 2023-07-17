@@ -89,6 +89,7 @@ class FirebaseConnection extends GetxController {
   //   return firestore.collection("user").snapshots();
   // }
 
+// login
   Future<void> login(String email, String password) async {
     final user = firestore.collection("user");
 
@@ -105,11 +106,13 @@ class FirebaseConnection extends GetxController {
     }
   }
 
+// delete user
   void delete(String document) {
     firestore.collection("user").doc(document).delete();
   }
 
-  Future<void> register(String email, String password) async {  
+// register
+  Future<void> register(String email, String password) async {
     final regist = firestore.collection("user");
 
     final user = await regist.doc(email).get();
@@ -122,5 +125,28 @@ class FirebaseConnection extends GetxController {
     } else {
       Get.snackbar("error", "email has been used");
     }
+  }
+
+  final buat_kelas = TextEditingController();
+  final buat_bagian = TextEditingController();
+  final buat_ruang = TextEditingController();
+  final buat_mapel = TextEditingController();
+
+  Future<void> BuatKelas(
+    String kelas,
+    String bagian,
+    String ruang,
+    String mapel,
+  ) async {
+    firestore.collection("kelas").add({
+      "kelas": kelas,
+      "bagian": bagian,
+      "ruang": ruang,
+      "mapel": mapel,
+    });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getKelas() {
+    return firestore.collection("kelas").snapshots();
   }
 }
