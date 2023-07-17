@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ilham_todolist/login.dart';
-import 'package:flutter_ilham_todolist/profile_screen.dart';
 import 'package:flutter_ilham_todolist/dashboard.dart';
 import 'package:get/get.dart';
 
@@ -35,24 +31,42 @@ class FirebaseConnection extends GetxController {
     }
   }
 
-  Future<void> register(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
-      User? user = userCredential.user; 
+// menggunakkan firebase auth
+  // Future<void> register(String email, String password) async {
+  //   try {
+  //     UserCredential userCredential = await _auth
+  //         .createUserWithEmailAndPassword(email: email, password: password);
+  //     User? user = userCredential.user;
 
-      firestore.collection("user").add({
-        "email" : email, 
-        "password" : password, 
-      });
+  //     firestore.collection("user").add({
+  //       "email": email,
+  //       "password": password,
+  //     });
 
-      if (user != null) {
-        print("User has been made");
-      } else {
-        print("failed");
-      }
-    } catch (e) {}
-  }
+  //     if (user != null) {
+  //       print("User has been made");
+  //     } else {
+  //       print("failed");
+  //     }
+  //   } catch (e) {}
+  // }
+
+  // FutureOr<void> login(String email, String password) async {
+  //   try {
+  //     // await getUser().first;
+  //     // UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+  //     // email: email, password: password);
+  //     Get.to(() => const Dashboard());
+  //   } on FirebaseException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       Get.snackbar("email", "user not found");
+  //     } else if (e.code == 'wrong-password') {
+  //       Get.snackbar("error", "wrong password");
+  //     } else {
+  //       Get.snackbar('error', 'Error: ${e.message}');
+  //     }
+  //   }
+  // }
 
   RxBool eyes = false.obs;
   void showpw() {
@@ -62,33 +76,51 @@ class FirebaseConnection extends GetxController {
   // Stream<QuerySnapshot<Map<String, dynamic>>> getData() {
   //   return firestore.collection("user").snapshots();
   // }
-  void getData() {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      String uid = user.uid;
-      String? useremail = user.email;
-      String? username = user.displayName;
-      // String role = user;
-    }
-  }
+  // void getData() {
+  //   User? user = _auth.currentUser;
+  //   if (user != null) {
+  //     String uid = user.uid;
+  //     String? useremail = user.email;
+  //     String? username = user.displayName;
+  //   }
+  // }
 
-  FutureOr<void> login(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      Get.to(() => const Dashboard());
-    } on FirebaseException catch (e) {
-      if (e.code == 'user-not-found') {
-        Get.snackbar("email", "user not found");
-      } else if (e.code == 'wrong-password') {
-        Get.snackbar("error", "wrong password");
-      } else {
-        Get.snackbar('error', 'Error: ${e.message}');
-      }
+  // Stream<QuerySnapshot<Map<String, dynamic>>> getUser() {
+  //   return firestore.collection("user").snapshots();
+  // }
+
+  Future<void> login(String email, String password) async {
+    final user = firestore.collection("user");
+
+    final snapshot = await user
+        .where('email', isEqualTo: email)
+        .where('password', isEqualTo: password)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      Get.to(() => const DashboardScreen());
+    } else {
+      Get.snackbar("error", "Invalid Credentials");
     }
   }
 
   void delete(String document) {
     firestore.collection("user").doc(document).delete();
+  }
+
+  Future<void> register(String email, String password) async {  
+    final regist = firestore.collection("user");
+
+    final user = await regist.doc(email).get();
+    if (!user.exists) {
+      // user.add({"email": email, "password": password});
+      await regist.doc(email).set({
+        "email": email,
+        "password": password,
+      });
+    } else {
+      Get.snackbar("error", "email has been used");
+    }
   }
 }

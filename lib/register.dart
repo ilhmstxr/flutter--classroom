@@ -79,10 +79,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Insert your password";
-                  } else if (value.length < 6) {
-                    return "password must be more than 6 characters long";
-                  }
-                  return null;
+                  } else
+                    // if (value.length < 6) {
+                    //   return "password must be more than 6 characters long";
+                    // }
+                    return null;
                 },
               ),
               SizedBox(
@@ -91,16 +92,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ElevatedButton(
                 onPressed: () async {
                   if (_keyregister.currentState!.validate()) {
-                    if (await controller.check(controller.registeremail.text)) {
-                      controller.register(controller.registeremail.text,
-                          controller.registerpassword.text);
-                      Get.snackbar("success", "account has been made");
-                      tampil();
-                    } else {
-                      Get.snackbar("failed", "another user using this email");
-                    }
-                  } else {
-                    Get.snackbar("failed", "please fill the form");
+                    // if (await controller.check(controller.registeremail.text)) {
+                    controller
+                        .register(controller.registeremail.text,
+                            controller.registerpassword.text)
+                        .then((value) {
+                      controller.registeremail.clear();
+                      controller.registerpassword.clear();
+                    });
+
+                    // menggunakkan firebase auth
+                    // controller.register(controller.registeremail.text,
+                    //     controller.registerpassword.text);
+                    // Get.snackbar("success", "account has been made");
+                    // tampil();
+                    //   } else {
+                    //     Get.snackbar("failed", "another user using this email");
+                    //   }
+                    // } else {
+                    //   Get.snackbar("failed", "please fill the form");
                   }
                 },
                 child: Text("register"),

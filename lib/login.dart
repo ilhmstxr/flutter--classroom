@@ -84,14 +84,19 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton(
                   onPressed: () {
                     if (_keylogin.currentState!.validate()) {
-                      controller.login(controller.loginemail.text,
-                          controller.loginpassword.text);
+                      controller
+                          .login(controller.loginemail.text,
+                              controller.loginpassword.text)
+                          .then((value) {
+                        controller.loginemail.clear();
+                        controller.loginpassword.clear();
+                      });
                     }
                   },
                   child: Text("login")),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => RegisterScreen());
+                  Get.to(() => const RegisterScreen());
                 },
                 child: Text(
                   "Dont have an account?",
